@@ -2,7 +2,7 @@ name: Update Day
 
 on:
   schedule:
-    - cron: "1 20 * * *"  # Ajaa joka päivä klo 00:01 UTC
+    - cron: "1 22 * * *"  # Ajaa joka päivä klo 00:01 UTC
   workflow_dispatch:  # Mahdollistaa manuaalisen käynnistyksen
 
 jobs:
