@@ -31,10 +31,6 @@ jobs:
         run: |
           git add day.json
           git commit -m "Update weekday to $(date +"%A")"
-    
-      - name: Pull and push changes
-        run: |
-          git pull --rebase origin change-weekday || echo "No changes to pull"
           git push origin change-weekday
 
       - name: Trigger merge workflow
