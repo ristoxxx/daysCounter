@@ -21,7 +21,7 @@ jobs:
       - name: Merge branch into main
         run: |
           git checkout main
-          git merge --no-ff change-weekday -m "Merge updated weekday"
+          git merge --no-ff origin/change-weekday -m "Merge updated weekday"
           git push origin main
 
       - name: Delete branch
