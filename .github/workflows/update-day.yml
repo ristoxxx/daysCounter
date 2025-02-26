@@ -1,0 +1,41 @@
+name: Update Day
+
+on:
+  schedule:
+    - cron: "1 20 * * *"  # Ajaa joka päivä klo 00:01 UTC
+  workflow_dispatch:  # Mahdollistaa manuaalisen käynnistyksen
+
+jobs:
+  update-day:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Create new branch
+        run: |
+          git checkout -b change-weekday
+
+      - name: Update day.json
+        run: |
+          TODAY=$(date +"%A")  # Hakee viikonpäivän englanniksi
+          jq --arg day "$TODAY" '.weekday = $day' day.json > temp.json && mv temp.json day.json
+
+      - name: Commit changes
+        run: |
+          git add day.json
+          git commit -m "Update weekday to $(date +"%A")"
+          git push origin change-weekday
+
+      - name: Trigger merge workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: merge-and-clean.yml
+          repo: ${{ github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
