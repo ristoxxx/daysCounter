@@ -1,0 +1,30 @@
+name: Merge and Cleanup
+
+on:
+  workflow_dispatch:  # Käynnistetään kutsulla edellisestä workflowsta
+
+jobs:
+  merge-and-clean:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Tarvitaan PR:n mergeämiseen
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Merge branch into main
+        run: |
+          git checkout main
+          git merge --no-ff change-weekday -m "Merge updated weekday"
+          git push origin main
+
+      - name: Delete branch
+        run: |
+          git push origin --delete change-weekday
+
